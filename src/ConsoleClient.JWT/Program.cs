@@ -75,13 +75,15 @@ internal class Program
         }
         else
         {
-            Log.Error("Authorization failure {Response]", response);
+            Log.Error("Authorization failure {Response}", response);
             throw new InvalidOperationException();
         }
 
         client.SetBearerToken(tokenResponse.AccessToken);
 
-        var apiResponse = await client.GetAsync("https://data-test.fmh.ch/api/Testt/FmhId/123456");
+        var baseUrl = configuration.GetSection("BaseUrl").Value;
+
+        var apiResponse = await client.GetAsync(string.Concat(baseUrl, "/api/Test/FmhId/123456"));
         if (!apiResponse.IsSuccessStatusCode)
         {
             Log.Error("StatusCode {ResponseStatusCode}", apiResponse.StatusCode);
